@@ -1,10 +1,10 @@
 <script lang="ts">
-  import Spotlight from "./Spotlight.svelte";
+  import Spotlight from "./Paper.svelte";
   import Chat from "./Chat.svelte";
 </script>
 
 <svelte:head>
-  <title>Paper Agent - Academic Paper Search</title>
+  <title>Paper Agent</title>
   <meta
     name="description"
     content="Search and chat about academic papers with our AI assistant"
@@ -16,9 +16,9 @@
     <div class="container mx-auto px-4">
       <div class="flex justify-between items-center">
         <h1 class="text-2xl font-medium text-gray-800">
-          Paper<span class="text-blue-600">Agent</span>
+          <span class="font-sans font-black font-stretch-extra-condensed overline align-top">Paper</span><span class="align-sub font-serif font-light underline decoration-wavy text-blue-600">Agent</span>
         </h1>
-        <div class="text-sm text-gray-500">Explore research papers with AI</div>
+        <div class="text-sm text-gray-500">Matthew M Li, Data Scientist</div>
       </div>
     </div>
   </header>
@@ -129,7 +129,7 @@
     </div>
 
     <footer class="mt-16 text-center text-gray-500 text-sm">
-      <p>© {new Date().getFullYear()} Paper Agent. All rights reserved.</p>
+      <p>© {new Date().getFullYear()} Matthew M Li. All rights reserved.</p>
     </footer>
   </main>
 </div>
