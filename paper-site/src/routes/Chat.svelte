@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { onMount, tick } from "svelte";
-  let searchQuery = "";
-  let chatMessages: { role: "user" | "assistant"; content: string }[] = [];
-  let isLoading = false;
-  let chatContainer: HTMLElement;
+  import { onMount } from "svelte";
+  let searchQuery = $state("");
+  let chatMessages: { role: "user" | "assistant"; content: string }[] = $state([]);
+  let isLoading = $state(false);
+  let chatContainer = $state<HTMLElement | null>(null);
 
   let loadingAnimation = `
     <div class="flex space-x-2">
@@ -12,13 +12,14 @@
     <div class="w-2 h-2 rounded-full bg-gray-300 animate-bounce" style="animation-delay: 0.4s"></div>
     </div>`;
 
-  function scrollChatToBottom() {
-    if (chatContainer) {
+  $effect(() => {
+    if (chatContainer && chatMessages.length > 0) {
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
-  }
+  });
 
-  async function handleSearch() {
+  async function handleSearch(event: SubmitEvent) {
+    event.preventDefault();
     if (!searchQuery.trim()) return;
 
     // clear searchQuery
@@ -28,11 +29,8 @@
     isLoading = true;
     chatMessages = [...chatMessages, { role: "user", content: inputMessage }];
 
-    await tick();
-    scrollChatToBottom();
-
     // Simulate a response - in a real implementation, this would be an API call
-    setTimeout(async () => {
+    setTimeout(() => {
       chatMessages = [
         ...chatMessages,
         {
@@ -41,10 +39,6 @@
         },
       ];
       isLoading = false;
-
-      // Wait for DOM updates before scrolling
-      await tick();
-      scrollChatToBottom();
     }, 1000);
   }
 
@@ -97,7 +91,7 @@
     ? 'border-t border-gray-100'
     : ''}"
 >
-  <form on:submit|preventDefault={handleSearch} class="flex gap-2">
+  <form onsubmit={handleSearch} class="flex gap-2">
     {#if isLoading}
       <div
         class="flex-grow px-4 py-3 border border-gray-200 rounded-lg bg-gray-100 text-gray-400 flex items-center justify-center"
@@ -125,7 +119,7 @@
     {#if chatMessages.length > 0}
       <button
         type="button"
-        on:click={resetChat}
+        onclick={resetChat}
         class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg transition-colors"
       >
         Clear
